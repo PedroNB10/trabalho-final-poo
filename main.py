@@ -6,29 +6,29 @@ import pickle
 import nota as nt
 
 
-class ViewPrincipal:
-    def __init__(self, root, controller):
-        self.root = root
-        self.root.title("App Açougue")
+class janelaPrincipal:
+    def __init__(self, raiz, controller):
+        self.raiz = raiz
+        self.raiz.title("App Açougue")
         self.controller = controller
         self.frame_height = 400
         self.frame_width = 400
-        self.screen_width = self.root.winfo_screenwidth()
-        self.screen_height = self.root.winfo_screenheight()
+        self.screen_width = self.raiz.winfo_screenwidth()
+        self.screen_height = self.raiz.winfo_screenheight()
         coordenada_x = int((self.screen_width/2) - (self.frame_height/2))
         coordenada_y = int((self.screen_height/2) - (self.frame_width/2))
-        self.root.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y))
+        self.raiz.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y))
 
-        self.menu_bar = tk.Menu(self.root)
-        self.menu_produto = tk.Menu(self.menu_bar)
-        self.menu_nota = tk.Menu(self.menu_bar)
-        self.menu_cliente = tk.Menu(self.menu_bar)
+        self.barra_menu = tk.Menu(self.raiz)
+        self.menu_produto = tk.Menu(self.barra_menu)
+        self.menu_nota = tk.Menu(self.barra_menu)
+        self.menu_cliente = tk.Menu(self.barra_menu)
 
 
-        self.menu_bar.add_cascade(label="Cliente", menu=self.menu_cliente)
-        self.menu_bar.add_cascade(label="Produto", menu=self.menu_produto)
-        self.menu_bar.add_cascade(label="Nota Fiscal", menu=self.menu_nota)
-        self.menu_bar.add_command(label="Sair", command= lambda: self.controller.fechar_janela(self.root))
+        self.barra_menu.add_cascade(label="Cliente", menu=self.menu_cliente)
+        self.barra_menu.add_cascade(label="Produto", menu=self.menu_produto)
+        self.barra_menu.add_cascade(label="Nota Fiscal", menu=self.menu_nota)
+        self.barra_menu.add_command(label="Sair", command= lambda: self.controller.fechar_janela(self.raiz))
 
 
         self.menu_produto.add_command(label="Cadastrar Produto")
@@ -51,14 +51,14 @@ class ViewPrincipal:
         self.menu_nota.add_command(label="Consultar Faturamento por Período")
 
         
-        self.root.config(menu=self.menu_bar)
+        self.raiz.config(menu=self.barra_menu)
 
-        self.root.mainloop()
+        self.raiz.mainloop()
 
 class ControlePrincipal:
     def __init__(self):
-        self.root = tk.Tk()
-        self.main_view = ViewPrincipal(self.root, self)
+        self.raiz = tk.Tk()
+        self.main_janela = janelaPrincipal(self.raiz, self)
 
 
 

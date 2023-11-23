@@ -64,36 +64,36 @@ class ControleCliente:
         janela.destroy()
 
 
-class ViewAuxiliar:
-    def __init__(self, controller):
-        self.root = tk.Tk()
-        self.root.title("View Auxiliar")
-        self.controller = controller
+class JanelaAuxiliar:
+    def __init__(self, controle):
+        self.raiz = tk.Tk()
+        self.raiz.title("janela Auxiliar")
+        self.controle = controle
         self.frame_height = 400
         self.frame_width = 400
-        self.screen_width = self.root.winfo_screenwidth()
-        self.screen_height = self.root.winfo_screenheight()
+        self.screen_width = self.raiz.winfo_screenwidth()
+        self.screen_height = self.raiz.winfo_screenheight()
         coordenada_x = int((self.screen_width/2) - (self.frame_height/2))
         coordenada_y = int((self.screen_height/2) - (self.frame_width/2))
-        self.root.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y)) # configura a janela para abrir no centro da tela
+        self.raiz.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y)) # configura a janela para abrir no centro da tela
 
-        self.cadastrar_button = tk.Button(self.root, text="Cadastrar Cliente", command="")
+        self.cadastrar_button = tk.Button(self.raiz, text="Cadastrar Cliente", command="")
         self.cadastrar_button.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.consultar_button = tk.Button(self.root, text="Consultar Cliente", command="")
+        self.consultar_button = tk.Button(self.raiz, text="Consultar Cliente", command="")
         self.consultar_button.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.mostar_button = tk.Button(self.root, text="Mostrar Instâncias", command=self.controller.mostrar_instancias)
+        self.mostar_button = tk.Button(self.raiz, text="Mostrar Instâncias", command=self.controle.mostrar_instancias)
         self.mostar_button.pack()
 
-        self.fechar_button = tk.Button(self.root, text="Fechar", command= lambda: self.controller.fechar_janela(self.root))
+        self.fechar_button = tk.Button(self.raiz, text="Fechar", command= lambda: self.controle.fechar_janela(self.raiz))
         self.fechar_button.pack()
 
 
 
-        self.root.mainloop()
+        self.raiz.mainloop()
 
         
 
@@ -102,6 +102,6 @@ if __name__ == "__main__":
     
 
     cliente_controle = ControleCliente()
-    view_aux = ViewAuxiliar(cliente_controle)
+    janela_aux = JanelaAuxiliar(cliente_controle)
 
 

@@ -39,10 +39,10 @@ class ControleNota:
         janela.destroy()
     
 
-class ViewAuxiliar:
+class JanelaAuxiliar:
     def __init__(self, controller):
         self.root = tk.Tk()
-        self.root.title("View Auxiliar")
+        self.root.title("janela Auxiliar")
         self.controller = controller
         self.frame_height = 400
         self.frame_width = 400
@@ -96,4 +96,4 @@ class ViewAuxiliar:
 
 if __name__ == "__main__":
     nota_controle = ControleNota()
-    view_aux = ViewAuxiliar(nota_controle)
+    janela_aux = JanelaAuxiliar(nota_controle)

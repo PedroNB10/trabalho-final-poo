@@ -64,10 +64,10 @@ class ControleProduto:
             print("")
     
 
-class ViewAuxiliar:
+class JanelaAuxiliar:
     def __init__(self, controller):
         self.root = tk.Tk()
-        self.root.title("View Auxiliar")
+        self.root.title("janela Auxiliar")
         self.controller = controller
         self.frame_height = 400
         self.frame_width = 400
@@ -118,4 +118,4 @@ class ViewAuxiliar:
 
 if __name__ == "__main__":
     produto_controle = ControleProduto()
-    view_auxiliar = ViewAuxiliar(produto_controle)
+    janela_auxiliar = JanelaAuxiliar(produto_controle)
