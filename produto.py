@@ -5,10 +5,11 @@ import os.path
 import pickle
 
 class Produto:
-    def __init__(self, codigo: int, descricao: str, preco_por_kg: float):
+    def __init__(self, codigo: int, descricao: str, preco_por_kg_venda: float, preco_por_kg_custo: float):
         self.__codigo = codigo
         self.__descricao = descricao
-        self.__preco_por_kg = preco_por_kg
+        self.__preco_por_kg_venda = preco_por_kg_venda 
+        self.__preco_por_kg_custo = preco_por_kg_custo
 
     @property
     def codigo(self):
@@ -19,10 +20,13 @@ class Produto:
         return self.__descricao
     
     @property
-    def preco_por_kg(self):
-        return self.__preco_por_kg
+    def preco_por_kg_venda(self):
+        return self.__preco_por_kg_venda
     
-
+    @property
+    def preco_por_kg_custo(self):
+        return self.__preco_por_kg_custo
+    
 
 
 
@@ -36,9 +40,9 @@ class ControleProduto:
                 self.__lista_de_produtos_cadastrados = pickle.load(f)
 
         else:
-            produto_01 = Produto(1, "Picanha", 50.00)
-            produto_02 = Produto(2, "Contra Filé", 40.00)
-            produto_03 = Produto(3, "Alcatra", 45.00)
+            produto_01 = Produto(1, "Picanha", 50.00, 30.00)
+            produto_02 = Produto(2, "Contra Filé", 40.00, 25.00)
+            produto_03 = Produto(3, "Alcatra", 45.00, 30.00)
             self.__lista_de_produtos_cadastrados.append(produto_01)
             self.__lista_de_produtos_cadastrados.append(produto_02)
             self.__lista_de_produtos_cadastrados.append(produto_03)
@@ -64,7 +68,8 @@ class ControleProduto:
         for produto in self.__lista_de_produtos_cadastrados:
             print(produto.codigo)
             print(produto.descricao)
-            print(produto.preco_por_kg)
+            print(produto.preco_por_kg_venda)
+            print(produto.preco_por_kg_custo)
             print("")
     
 
