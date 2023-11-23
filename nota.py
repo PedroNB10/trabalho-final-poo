@@ -41,55 +41,55 @@ class ControleNota:
 
 class JanelaAuxiliar:
     def __init__(self, controller):
-        self.root = tk.Tk()
-        self.root.title("janela Auxiliar")
+        self.raiz = tk.Tk()
+        self.raiz.title("janela Auxiliar")
         self.controller = controller
         self.frame_height = 400
         self.frame_width = 400
-        self.screen_width = self.root.winfo_screenwidth()
-        self.screen_height = self.root.winfo_screenheight()
+        self.screen_width = self.raiz.winfo_screenwidth()
+        self.screen_height = self.raiz.winfo_screenheight()
         coordenada_x = int((self.screen_width/2) - (self.frame_height/2))
         coordenada_y = int((self.screen_height/2) - (self.frame_width/2))
-        self.root.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y)) # configura a janela para abrir no centro da tela
+        self.raiz.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y)) # configura a janela para abrir no centro da tela
 
 
-        self.bt1 = tk.Button(self.root, text="Consultar Nota Fiscal")
+        self.bt1 = tk.Button(self.raiz, text="Consultar Nota Fiscal")
         self.bt1.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
         
-        self.bt2 = tk.Button(self.root, text="Consultar Vendas por Cliente")
+        self.bt2 = tk.Button(self.raiz, text="Consultar Vendas por Cliente")
         self.bt2.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.bt3 = tk.Button(self.root, text="Consultar Produtos mais vendidos")
+        self.bt3 = tk.Button(self.raiz, text="Consultar Produtos mais vendidos")
         self.bt3.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.bt4= tk.Button(self.root, text="Consultar Faturamento por Produto")
+        self.bt4= tk.Button(self.raiz, text="Consultar Faturamento por Produto")
         self.bt4.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.bt5 = tk.Button(self.root, text="Consultar Faturamento por Cliente")
+        self.bt5 = tk.Button(self.raiz, text="Consultar Faturamento por Cliente")
         self.bt5.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.bt6 = tk.Button(self.root, text="Consultar Faturamento por Data")
+        self.bt6 = tk.Button(self.raiz, text="Consultar Faturamento por Data")
         self.bt6.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.bt7 = tk.Button(self.root, text="Consultar Faturamento por Período")
+        self.bt7 = tk.Button(self.raiz, text="Consultar Faturamento por Período")
         self.bt7.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
 
 
-        self.fechar_button = tk.Button(self.root, text="Fechar", command= lambda: self.controller.fechar_janela(self.root))
+        self.fechar_button = tk.Button(self.raiz, text="Fechar", command= lambda: self.controller.fechar_janela(self.raiz))
         self.fechar_button.pack()
 
 
 
 
-        self.root.mainloop()
+        self.raiz.mainloop()
 
         
     

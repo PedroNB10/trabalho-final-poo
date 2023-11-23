@@ -66,48 +66,48 @@ class ControleProduto:
 
 class JanelaAuxiliar:
     def __init__(self, controller):
-        self.root = tk.Tk()
-        self.root.title("janela Auxiliar")
+        self.raiz = tk.Tk()
+        self.raiz.title("janela Auxiliar")
         self.controller = controller
         self.frame_height = 400
         self.frame_width = 400
-        self.screen_width = self.root.winfo_screenwidth()
-        self.screen_height = self.root.winfo_screenheight()
+        self.screen_width = self.raiz.winfo_screenwidth()
+        self.screen_height = self.raiz.winfo_screenheight()
         coordenada_x = int((self.screen_width/2) - (self.frame_height/2))
         coordenada_y = int((self.screen_height/2) - (self.frame_width/2))
-        self.root.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y)) # configura a janela para abrir no centro da tela
+        self.raiz.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y)) # configura a janela para abrir no centro da tela
 
-        self.bt1 = tk.Button(self.root, text="Cadastrar Produto", command="")
+        self.bt1 = tk.Button(self.raiz, text="Cadastrar Produto", command="")
         self.bt1.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
         
-        self.bt2 = tk.Button(self.root, text="Consultar Produto", command="")
+        self.bt2 = tk.Button(self.raiz, text="Consultar Produto", command="")
         self.bt2.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.bt3 = tk.Button(self.root, text="Alterar Produto", command="")
+        self.bt3 = tk.Button(self.raiz, text="Alterar Produto", command="")
         self.bt3.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.bt4= tk.Button(self.root, text="Excluir Produto", command="")
+        self.bt4= tk.Button(self.raiz, text="Excluir Produto", command="")
         self.bt4.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.bt5 = tk.Button(self.root, text="Ir para o carrinho", command="")
+        self.bt5 = tk.Button(self.raiz, text="Ir para o carrinho", command="")
         self.bt5.pack()
         # self.btn.bind("<Button>", controle.enterHandler)
 
-        self.bt6 = tk.Button(self.root, text="Mostrar Instâncias", command=self.controller.mostrar_instancias)
+        self.bt6 = tk.Button(self.raiz, text="Mostrar Instâncias", command=self.controller.mostrar_instancias)
         self.bt6.pack()
 
 
 
-        self.fechar_button = tk.Button(self.root, text="Fechar", command= lambda: self.controller.fechar_janela(self.root))
+        self.fechar_button = tk.Button(self.raiz, text="Fechar", command= lambda: self.controller.fechar_janela(self.raiz))
         self.fechar_button.pack()
 
 
 
-        self.root.mainloop()
+        self.raiz.mainloop()
 
         
     def fechar_janela(self, janela):
