@@ -41,6 +41,9 @@ class ControleProduto:
             self.__lista_de_produtos_cadastrados.append(produto_01)
             self.__lista_de_produtos_cadastrados.append(produto_02)
             self.__lista_de_produtos_cadastrados.append(produto_03)
+    
+    def lista_de_produtos_cadastrados(self):
+        return self.__lista_de_produtos_cadastrados 
 
     def fechar_janela(self, janela):
         self.salvar_produtos_cadastrados()

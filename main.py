@@ -4,6 +4,10 @@ from tkinter import ttk
 import os.path
 import pickle
 import nota as nt
+import produto as pd
+import cliente as cl
+
+
 
 
 class janelaPrincipal:
@@ -59,7 +63,9 @@ class ControlePrincipal:
     def __init__(self):
         self.raiz = tk.Tk()
         self.main_janela = janelaPrincipal(self.raiz, self)
-
+        self.controle_cliente = cl.ControleCliente()
+        self.controle_produto = pd.ControleProduto()
+        self.controle_nota = nt.ControleNota()
 
 
     def fechar_janela(self, janela):

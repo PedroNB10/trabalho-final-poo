@@ -23,37 +23,42 @@ class Cliente:
     def cpf(self):
         return self.__cpf
     
+    @property
+    def lista_de_notas(self):
+        return self.__lista_de_notas
+    
 
 
 class ControleCliente:
     def __init__(self):
-        self.clientes_cadastrados = []
+        self.__clientes_cadastrados = []
 
 
         if os.path.isfile("clientes.pickle"):
            with open("clientes.pickle", "rb") as f:
-                self.clientes_cadastrados = pickle.load(f)
+                self.__clientes_cadastrados = pickle.load(f)
         else:
             cliente_01 = Cliente("João", "joao@gmail.com",'1234120558')
             cliente_02 = Cliente("Maria", "maria@gmail.com", "1234120558")
             cliente_03 = Cliente("José", "jose@gmail.com", "1234120558")
-            self.clientes_cadastrados.append(cliente_01)
-            self.clientes_cadastrados.append(cliente_02)
-            self.clientes_cadastrados.append(cliente_03)
+            self.__clientes_cadastrados.append(cliente_01)
+            self.__clientes_cadastrados.append(cliente_02)
+            self.__clientes_cadastrados.append(cliente_03)
 
 
-            
+    def lista_de_clientes_cadastrados(self):
+        return self.__clientes_cadastrados
 
 
     def salvar_clientes_cadastrados(self):
         with open("clientes.pickle", "wb") as f:
 
-            pickle.dump(self.clientes_cadastrados, f)
+            pickle.dump(self.__clientes_cadastrados, f)
 
     def mostrar_instancias(self):
         os.system("cls")
         print("Clientes Cadastrados: ")
-        for cliente in self.clientes_cadastrados:
+        for cliente in self.__clientes_cadastrados:
             print(cliente.nome)
             print(cliente.email)
             print(cliente.cpf)

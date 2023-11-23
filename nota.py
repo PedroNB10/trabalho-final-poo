@@ -33,7 +33,8 @@ class ControleNota:
     def __init__(self):
         self.__lista_de_notas_fiscais = []
 
-    
+    def lista_de_notas_fiscais_geradas(self):
+        return self.__lista_de_notas_fiscais
 
     def fechar_janela(self, janela):
         janela.destroy()
