@@ -27,7 +27,8 @@ class Produto:
 
 
 class ControleProduto:
-    def __init__(self):
+    def __init__(self, controle_principal = None):
+        self.__controle_principal = controle_principal
         self.__lista_de_produtos_cadastrados = []
 
         if os.path.isfile("produtos.pickle"):

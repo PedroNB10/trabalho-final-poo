@@ -63,9 +63,9 @@ class ControlePrincipal:
     def __init__(self):
         self.raiz = tk.Tk()
         self.main_janela = janelaPrincipal(self.raiz, self)
-        self.controle_cliente = cl.ControleCliente()
-        self.controle_produto = pd.ControleProduto()
-        self.controle_nota = nt.ControleNota()
+        self.controle_cliente = cl.ControleCliente(self)
+        self.controle_produto = pd.ControleProduto(self)
+        self.controle_nota = nt.ControleNota(self)
 
 
     def fechar_janela(self, janela):

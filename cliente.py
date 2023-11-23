@@ -30,7 +30,8 @@ class Cliente:
 
 
 class ControleCliente:
-    def __init__(self):
+    def __init__(self, controle_principal = None):
+        self.__controle_principal = controle_principal
         self.__clientes_cadastrados = []
 
 

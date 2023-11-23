@@ -30,7 +30,8 @@ class NotaFiscal:
     
 
 class ControleNota:
-    def __init__(self):
+    def __init__(self, controle_principal = None):
+        self.__controle_principal = controle_principal
         self.__lista_de_notas_fiscais = []
 
     def lista_de_notas_fiscais_geradas(self):
