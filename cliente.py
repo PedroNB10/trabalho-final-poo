@@ -32,7 +32,14 @@ class LimiteCadastraCliente(tk.Toplevel):
     def __init__(self, controle):
 
         tk.Toplevel.__init__(self)
-        self.geometry('250x100')
+
+        self.frame_height = 100
+        self.frame_width = 250
+        self.screen_width = self.winfo_screenwidth()
+        self.screen_height = self.winfo_screenheight()
+        coordenada_x = int((self.screen_width/2) - (self.frame_width/2))
+        coordenada_y = int((self.screen_height/2) - (self.frame_height/2))
+        self.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y))
         self.title("Cadastra Cliente")
         self.controle = controle
 
@@ -59,13 +66,13 @@ class LimiteCadastraCliente(tk.Toplevel):
         self.input_email.pack(side="left")
         self.input_cpf.pack(side="left")
       
-        self.button_submit = tk.Button(self.frame_button ,text="Enter")      
+        self.button_submit = tk.Button(self.frame_button ,text="Enter", command=self.controle.enter_handler)      
         self.button_submit.pack(side="left")
-        self.button_submit.bind("<Button>", controle.enter_handler)
+
       
-        self.button_clear = tk.Button(self.frame_button ,text="Clear")      
+        self.button_clear = tk.Button(self.frame_button ,text="Clear", command=self.controle.clear_handler)      
         self.button_clear.pack(side="left")
-        self.button_clear.bind("<Button>", controle.clear_handler)  
+
 
         self.fechar_button = tk.Button(self.frame_button, text="Fechar", command= lambda: self.controle.fechar_janela(self))
         self.fechar_button.pack()
@@ -85,7 +92,7 @@ class LimiteConsultaCliente():
         messagebox.showinfo(nome, str)
 
 class ControleCliente:
-    def __init__(self, controle_principal = None):
+    def __init__(self, controle_principal):
         self.__controle_principal = controle_principal
         self.__clientes_cadastrados = []
 
@@ -101,7 +108,7 @@ class ControleCliente:
             self.__clientes_cadastrados.append(cliente_02)
             self.__clientes_cadastrados.append(cliente_03)
 
-
+    @property
     def lista_de_clientes_cadastrados(self):
         return self.__clientes_cadastrados
 
@@ -111,10 +118,10 @@ class ControleCliente:
 
             pickle.dump(self.__clientes_cadastrados, f)
 
-    def cadastrar_cliente_handler(self, event):
+    def cadastrar_cliente_handler(self):
         self.limiteCad = LimiteCadastraCliente(self)
 
-    def consultar_cliente_handler(self, event):
+    def consultar_cliente_handler(self):
         self.limite_consulta = LimiteConsultaCliente()
         str = ''
         cliente_buscado = self.limite_consulta.consulta()
@@ -136,16 +143,16 @@ class ControleCliente:
             print(cliente.cpf)
             print("")
 
-    def enter_handler(self, event):
+    def enter_handler(self):
         nome = self.limiteCad.input_nome.get()
         email = self.limiteCad.input_email.get()
         cpf = self.limiteCad.input_cpf.get()
         cliente = Cliente(nome, email, cpf)
         self.__clientes_cadastrados.append(cliente)
         self.limiteCad.mostraJanela('Sucesso', 'Cliente cadastrado com sucesso')
-        self.clear_handler(event)
+        self.clear_handler()
 
-    def clear_handler(self, event):
+    def clear_handler(self):
         self.limiteCad.input_nome.delete(0, len(self.limiteCad.input_nome.get()))
         self.limiteCad.input_email.delete(0, len(self.limiteCad.input_email.get()))
         self.limiteCad.input_cpf.delete(0, len(self.limiteCad.input_cpf.get()))
@@ -168,13 +175,13 @@ class JanelaAuxiliar:
         coordenada_y = int((self.screen_height/2) - (self.frame_width/2))
         self.raiz.geometry("{}x{}+{}+{}".format(self.frame_width, self.frame_height, coordenada_x, coordenada_y)) # configura a janela para abrir no centro da tela
 
-        self.cadastrar_button = tk.Button(self.raiz, text="Cadastrar Cliente", command="")
+        self.cadastrar_button = tk.Button(self.raiz, text="Cadastrar Cliente", command=controle.cadastrar_cliente_handler)
         self.cadastrar_button.pack()
-        self.cadastrar_button.bind("<Button>", controle.cadastrar_cliente_handler)
 
-        self.consultar_button = tk.Button(self.raiz, text="Consultar Cliente", command="")
+
+        self.consultar_button = tk.Button(self.raiz, text="Consultar Cliente", command=controle.consultar_cliente_handler)
         self.consultar_button.pack()
-        self.consultar_button.bind("<Button>", controle.consultar_cliente_handler)
+    
 
         self.mostar_button = tk.Button(self.raiz, text="Mostrar Instâncias", command=self.controle.mostrar_instancias)
         self.mostar_button.pack()
@@ -192,7 +199,7 @@ class JanelaAuxiliar:
 if __name__ == "__main__":
     
 
-    cliente_controle = ControleCliente()
+    cliente_controle = ControleCliente(None)
     janela_aux = JanelaAuxiliar(cliente_controle)
 
 
