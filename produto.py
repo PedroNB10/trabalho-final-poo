@@ -411,7 +411,6 @@ class ControleProduto:
             messagebox.showerror("Erro", "Preencha todos os campos!")
             return
         
-        # produto_codigo = int(produto_codigo) # adicionei isso
         produto = self.getProduto(produto_codigo)
         
         if produto == None:
@@ -549,23 +548,23 @@ class JanelaAuxiliar:
 
         self.bt1 = tk.Button(self.raiz, text="Cadastrar Produto", command=self.controller.criar_tela_cadastro_produto)
         self.bt1.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+
         
         self.bt2 = tk.Button(self.raiz, text="Consultar Produto", command="")
         self.bt2.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+  
 
         self.bt3 = tk.Button(self.raiz, text="Alterar Produto", command="")
         self.bt3.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+
 
         self.bt4= tk.Button(self.raiz, text="Excluir Produto", command="")
         self.bt4.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+    
 
         self.bt5 = tk.Button(self.raiz, text="Ir para o carrinho", command="")
         self.bt5.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+   
 
         self.bt6 = tk.Button(self.raiz, text="Mostrar Instâncias", command=self.controller.mostrar_instancias)
         self.bt6.pack()

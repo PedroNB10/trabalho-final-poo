@@ -351,7 +351,7 @@ class ControleNota:
         for produto in lista_de_produtos_vendidos:
             dicionario_produtos_vendidos[produto.descricao] = 0
                     
-        # lista_de_produtos_vendidos.sort(key=lambda x: x.descricao)
+ 
         dicionario_em_ordem_decrescente = {}
         
         if len(lista_de_produtos_vendidos) < 5:
@@ -483,27 +483,27 @@ class JanelaAuxiliar:
         
         self.bt2 = tk.Button(self.raiz, text="Consultar Vendas por Cliente")
         self.bt2.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+
 
         self.bt3 = tk.Button(self.raiz, text="Consultar Produtos mais vendidos")
         self.bt3.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+
 
         self.bt4= tk.Button(self.raiz, text="Consultar Faturamento por Produto")
         self.bt4.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+ 
 
         self.bt5 = tk.Button(self.raiz, text="Consultar Faturamento por Cliente")
         self.bt5.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+
 
         self.bt6 = tk.Button(self.raiz, text="Consultar Faturamento por Data")
         self.bt6.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+    
 
         self.bt7 = tk.Button(self.raiz, text="Consultar Faturamento por Período")
         self.bt7.pack()
-        # self.btn.bind("<Button>", controle.enterHandler)
+  
 
 
 
