@@ -45,7 +45,7 @@ class NotaFiscal:
 class ControleNota:
     def __init__(self, controle_principal = None): # lembrar de remover
         self.controle_principal = controle_principal
-
+        self.cpf_cliente_atual = None
         if not os.path.isfile("notas.pickle"):
             self.__lista_de_notas_fiscais = []
 
@@ -213,6 +213,19 @@ class ControleNota:
     def criar_janela_consultar_periodo(self):
         self.limite_consultar_periodo = ConsultarPeriodoView(self)
         
+    def consultar_faturamento_por_cliente_por_periodo_handler(self):
+        self.cpf_cliente_atual = simpledialog.askstring("Faturamento por Cliente", "Digite o CPF do cliente: ")
+        
+        cliente_consultado = self.controle_principal.controle_cliente.getCliente(self.cpf_cliente_atual)
+        
+        if cliente_consultado == None:
+            messagebox.showinfo("Faturamento por Cliente", "Cliente não encontrado")
+            return
+        
+        self.limite_consultar_periodo = ConsultarPeriodoView(self)
+        
+        
+        
     def consultar_faturamento_por_periodo_handler(self):
         data_inicial = self.limite_consultar_periodo.input_data_inicial.get()
         data_final = self.limite_consultar_periodo.input_data_final.get()
@@ -230,7 +243,7 @@ class ControleNota:
         str = ''
         str += 'Notas Fiscais Geradas no período de ' + data_inicial + ' a ' + data_final + '\n\n'
         for nota in notas:
-            if data_inicial_formatada <= nota.data <= data_final_formatada:
+            if data_inicial_formatada <= nota.data <= data_final_formatada and self.cpf_cliente_atual == None:
                 str += f'Número da Nota: {(nota.numero)}\n'
                 str += f'Data: {nota.data.day}/{nota.data.month}/{nota.data.year}\n'
                 str += f'CPF do Cliente: {nota.cpf_cliente}\n\n'
@@ -244,6 +257,23 @@ class ControleNota:
                 str += f'\nValor Total: R$ {self.calcular_valor_total_de_uma_nota(nota.numero)}\n'
                 str += '-------------------------------------------------------------------------\n\n'
                 valor_total += self.calcular_valor_total_de_uma_nota(nota.numero)
+                
+            elif data_inicial_formatada <= nota.data <= data_final_formatada and self.cpf_cliente_atual != None:
+                if nota.cpf_cliente == self.cpf_cliente_atual:
+                    str += f'Número da Nota: {(nota.numero)}\n'
+                    str += f'Data: {nota.data.day}/{nota.data.month}/{nota.data.year}\n'
+                    str += f'CPF do Cliente: {nota.cpf_cliente}\n\n'
+                    str += 'Produtos: \n'
+                    c = 1
+                    for produto in nota.produtos:
+                        str += f'{c} - {produto.produto.descricao} - '
+                        str += f'Quantidade: {produto.quantidade} kg - '
+                        str += f'Preço por kg: R$ {produto.produto.preco_por_kg} \n'
+                        c += 1
+                    str += f'\nValor Total: R$ {self.calcular_valor_total_de_uma_nota(nota.numero)}\n'
+                    str += '-------------------------------------------------------------------------\n\n'
+                    valor_total += self.calcular_valor_total_de_uma_nota(nota.numero)
+                    self.cpf_cliente_atual = None
                 
         str += f'Fatutamento Total: R$ {valor_total}\n'     
         
