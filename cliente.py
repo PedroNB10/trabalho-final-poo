@@ -27,6 +27,9 @@ class Cliente:
     def lista_de_notas(self):
         return self.__lista_de_notas
     
+    def adicionar_nota_a_cliente(self, nota):
+        self.__lista_de_notas.append(nota)
+    
 
 class LimiteCadastraCliente(tk.Toplevel):
     def __init__(self, controle):
@@ -94,29 +97,55 @@ class LimiteConsultaCliente():
 class ControleCliente:
     def __init__(self, controle_principal):
         self.__controle_principal = controle_principal
-        self.__clientes_cadastrados = []
 
+        if not os.path.isfile("clientes.pickle"):
+            self.clientes_cadastrados = []
+            cliente_01 = Cliente("João", "joao@gmail.com",'50639457112')
+            cliente_02 = Cliente("Maria", "maria@gmail.com",'12345678901')
+            cliente_03 = Cliente("Pedro", "pedro@gmail.com",'98765432109')
+            cliente_04 = Cliente("Ana", "ana@gmail.com",'45678912345')
+            cliente_05 = Cliente("Lucas", "lucas@gmail.com",'78912345678')
 
-        if os.path.isfile("clientes.pickle"):
-           with open("clientes.pickle", "rb") as f:
-                self.__clientes_cadastrados = pickle.load(f)
+            self.clientes_cadastrados.append(cliente_01)
+            self.clientes_cadastrados.append(cliente_02)
+            self.clientes_cadastrados.append(cliente_03)
+            self.clientes_cadastrados.append(cliente_04)
+            self.clientes_cadastrados.append(cliente_05)
+
         else:
-            cliente_01 = Cliente("João", "joao@gmail.com",'1234120558')
-            cliente_02 = Cliente("Maria", "maria@gmail.com", "1234120558")
-            cliente_03 = Cliente("José", "jose@gmail.com", "1234120558")
-            self.__clientes_cadastrados.append(cliente_01)
-            self.__clientes_cadastrados.append(cliente_02)
-            self.__clientes_cadastrados.append(cliente_03)
+            with open("clientes.pickle", "rb") as f:
+                self.clientes_cadastrados = pickle.load(f)
+                
+
 
     @property
     def lista_de_clientes_cadastrados(self):
-        return self.__clientes_cadastrados
+        return self.clientes_cadastrados
+    
+    def getCliente(self, cpf):
+        cliente = None
+        for cliente in self.clientes_cadastrados:
+            if cliente.cpf == cpf:
+                return cliente
+        return None
+    
+    def mostrar_clientes_cadastrados(self):
+        print("Clientes Cadastrados: ")
+        print(self.clientes_cadastrados)
+        str = ''
+        for cliente in self.clientes_cadastrados:
+            str += 'Nome: ' + cliente.nome + '\n'
+            str += 'Email: ' + cliente.email + '\n'
+            str += 'Cpf: ' + cliente.cpf + '\n'
+            str += '------------------------\n'
 
+        messagebox.showinfo('Clientes Cadastrados', str)
 
     def salvar_clientes_cadastrados(self):
-        with open("clientes.pickle", "wb") as f:
-
-            pickle.dump(self.__clientes_cadastrados, f)
+        
+        if len(self.clientes_cadastrados) != 0:    
+            with open("clientes.pickle", "wb") as f:
+                pickle.dump(self.clientes_cadastrados, f)
 
     def cadastrar_cliente_handler(self):
         self.limiteCad = LimiteCadastraCliente(self)
@@ -125,7 +154,11 @@ class ControleCliente:
         self.limite_consulta = LimiteConsultaCliente()
         str = ''
         cliente_buscado = self.limite_consulta.consulta()
-        for cliente in self.__clientes_cadastrados:
+        if cliente_buscado == "":
+            messagebox.showinfo('Consulta', 'Nenhum cliente foi buscado!')
+            return
+        
+        for cliente in self.clientes_cadastrados:
             if cliente_buscado == cliente.cpf:
                 str += 'Nome: ' + cliente.nome + '\n'
                 str += 'Email: ' + cliente.email + '\n'
@@ -137,7 +170,7 @@ class ControleCliente:
     def mostrar_instancias(self):
         os.system("cls")
         print("Clientes Cadastrados: ")
-        for cliente in self.__clientes_cadastrados:
+        for cliente in self.clientes_cadastrados:
             print(cliente.nome)
             print(cliente.email)
             print(cliente.cpf)
@@ -148,7 +181,7 @@ class ControleCliente:
         email = self.limiteCad.input_email.get()
         cpf = self.limiteCad.input_cpf.get()
         cliente = Cliente(nome, email, cpf)
-        self.__clientes_cadastrados.append(cliente)
+        self.clientes_cadastrados.append(cliente)
         self.limiteCad.mostraJanela('Sucesso', 'Cliente cadastrado com sucesso')
         self.clear_handler()
 

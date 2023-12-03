@@ -1,17 +1,19 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, simpledialog
 from tkinter import ttk
 import os.path
 import pickle
+
+from datetime import datetime
 
 import cliente as cl # lembrar de remover
 
 
 class NotaFiscal:
-    def __init__(self, numero:int, data: str, cpf_cliente: str, produtos: list):
+    def __init__(self, numero, data, cpf_cliente, produtos):
         self.__numero = numero
         self.__data = data
-        self.__cpf_cliente = cpf_cliente
+        self.cpf_cliente = cpf_cliente
         self.__produtos = produtos
 
     
@@ -27,6 +29,13 @@ class NotaFiscal:
     def cpf_cliente(self):
         return self.__cpf_cliente
     
+    @cpf_cliente.setter
+    def cpf_cliente(self, cpf):
+  
+        if len(cpf) != 11:
+            raise ValueError("CPF inválido")
+        self.__cpf_cliente = cpf
+            
     @property
     def produtos(self):
         return self.__produtos
@@ -34,9 +43,102 @@ class NotaFiscal:
 
 class ControleNota:
     def __init__(self, controle_principal = None): # lembrar de remover
-        self.__controle_principal = controle_principal
-        self.__lista_de_notas_fiscais = []
+        self.controle_principal = controle_principal
 
+        if not os.path.isfile("notas.pickle"):
+            self.__lista_de_notas_fiscais = []
+
+        else:
+            with open("notas.pickle", "rb") as f:
+                self.__lista_de_notas_fiscais = pickle.load(f)
+                
+                
+    def salvar_notas_fiscais(self):
+        
+        if len(self.__lista_de_notas_fiscais) != 0:
+            with open("notas.pickle", "wb") as f:
+                pickle.dump(self.__lista_de_notas_fiscais, f)
+            
+            
+    def mostrar_ultima_nota_fiscal(self):
+        lista_de_notas = self.__lista_de_notas_fiscais
+        ultima_nota = lista_de_notas[-1]
+        print(ultima_nota)
+        print(ultima_nota.cpf_cliente)
+        print(ultima_nota.data)
+        print(ultima_nota.numero)
+        str = ''
+        str += f'Número da Nota: {ultima_nota.numero}\n'
+        str += f'Data: {ultima_nota.data.day}/{ultima_nota.data.month}/{ultima_nota.data.year}\n'
+        str += f'CPF do Cliente: {ultima_nota.cpf_cliente}\n\n'
+        str += 'Produtos: \n'
+        c = 1
+        for produto in ultima_nota.produtos:
+            str += f'{c} - {produto.produto.descricao} - '
+            str += f'Quantidade: {produto.quantidade} kg - '
+            str += f'Preço por kg: R$ {produto.produto.preco_por_kg} \n'
+            c += 1
+        str += f'\nValor Total: R$ {self.calcular_valor_total_de_uma_nota(ultima_nota.numero)}\n'
+        str += '-------------------------------------------------------------------------\n\n'
+            
+        messagebox.showinfo('Nota Fiscal Gerada', str)
+            
+    def mostrar_notas_fiscais(self):
+        lista_de_notas = self.__lista_de_notas_fiscais
+        
+        if len(lista_de_notas) == 0:
+            messagebox.showinfo("Notas Fiscais", "Não há notas fiscais cadastradas")
+            return
+        
+        str = ''
+        for nota in lista_de_notas:
+            str += f'Número da Nota: {(nota.numero)}\n'
+            str += f'Data: {nota.data.day}/{nota.data.month}/{nota.data.year}\n'
+            str += f'CPF do Cliente: {nota.cpf_cliente}\n\n'
+            str += 'Produtos: \n'
+            c = 1
+            for produto in nota.produtos:
+                str += f'{c} - {produto.produto.descricao} - '
+                str += f'Quantidade: {produto.quantidade} kg - '
+                str += f'Preço por kg: R$ {produto.produto.preco_por_kg} \n'
+                c += 1
+            str += f'\nValor Total: R$ {self.calcular_valor_total_de_uma_nota(nota.numero)}\n'
+            str += '-------------------------------------------------------------------------\n\n'
+            
+        messagebox.showinfo('Notas Fiscais', str)
+        
+    def calcular_valor_total_de_uma_nota(self, numero_nota):
+        lista_de_notas = self.__lista_de_notas_fiscais
+        for nota in lista_de_notas:
+            if nota.numero == numero_nota:
+                valor_total = 0
+                for produto in nota.produtos:
+                    valor_total += produto.produto.preco_por_kg * produto.quantidade
+                return valor_total
+        return None
+            
+        
+    def criar_instancia_nota(self, numero, data, cpf_cliente, produtos):
+        
+        try:
+            
+            nota = NotaFiscal(numero, data, cpf_cliente, produtos)
+            self.__lista_de_notas_fiscais.append(nota)
+            cliente = self.controle_principal.controle_cliente.getCliente(cpf_cliente)
+            
+            if cliente == None:
+                raise ValueError("Cliente não encontrado")
+            print("Antes")
+            print(cliente.lista_de_notas)
+            cliente.lista_de_notas.append(nota)
+            print("Depois")
+            print(cliente.lista_de_notas)
+            
+            print("Total de notas")
+            print(self.__lista_de_notas_fiscais)
+        except ValueError as error:
+            messagebox.showwarning("Alerta", str(error))
+            
     def lista_de_notas_fiscais_geradas(self):
         return self.__lista_de_notas_fiscais
     
@@ -45,7 +147,7 @@ class ControleNota:
 
     def consultar_nota_handler(self):
         cpf = self.__limite_consultar_nota.input_cpf.get()
-        clientes = self.__controle_principal.controle_cliente.lista_de_clientes_cadastrados
+        clientes = self.controle_principal.controle_cliente.lista_de_clientes_cadastrados
         for cliente in clientes:
             if cliente.cpf == cpf:
                 notas = cliente.lista_de_notas
@@ -55,6 +157,58 @@ class ControleNota:
                         break
                 break
         messagebox.showinfo("Nota Fiscal", "Não há notas fiscais para este cliente")
+        
+    def mostrar_notas_fiscais_por_cliente(self, cpf):
+        notas = self.__lista_de_notas_fiscais
+        str = ''
+        for nota in notas:
+            if nota.cpf_cliente == cpf:
+                str += f'Número da Nota: {(nota.numero)}\n'
+                str += f'Data: {nota.data.day}/{nota.data.month}/{nota.data.year}\n'
+                str += f'CPF do Cliente: {nota.cpf_cliente}\n\n'
+                str += 'Produtos: \n'
+                c = 1
+                for produto in nota.produtos:
+                    str += f'{c} - {produto.produto.descricao} - '
+                    str += f'Quantidade: {produto.quantidade} kg - '
+                    str += f'Preço por kg: R$ {produto.produto.preco_por_kg} \n'
+                    c += 1
+                str += f'\nValor Total: R$ {self.calcular_valor_total_de_uma_nota(nota.numero)}\n'
+                str += '-------------------------------------------------------------------------\n\n'
+        str += '-------------------------------------------------------------------------\n'        
+        str += f'Fatutamento Total: R$ {self.calcular_faturamento_por_cliente(cpf)}\n'
+        str += '-------------------------------------------------------------------------\n\n'
+        messagebox.showinfo('Notas Fiscais', str)
+        
+        
+    def calcular_faturamento_por_cliente(self, cpf):
+        notas = self.__lista_de_notas_fiscais
+        valor_total = 0
+        for nota in notas:
+            if nota.cpf_cliente == cpf:
+                valor_total += self.calcular_valor_total_de_uma_nota(nota.numero)
+        return valor_total
+        
+    def consultar_faturamento_por_cliente(self):
+        cpf = simpledialog.askstring("Faturamento por Cliente", "Digite o CPF do cliente: ")
+        cliente = self.controle_principal.controle_cliente.getCliente(cpf)
+        
+        if cliente == None:
+            messagebox.showinfo("Faturamento por Cliente", "Cliente não encontrado")
+            return
+        
+        if len(cliente.lista_de_notas) == 0:
+            messagebox.showinfo("Faturamento por Cliente", "Cliente não possui notas fiscais")
+            return
+        
+        print(cliente.nome)
+        print(cliente.email)
+        print(cliente.cpf)
+        print(cliente.lista_de_notas)
+        
+
+        self.mostrar_notas_fiscais_por_cliente(cpf)
+    
     def fechar_janela(self, janela):
         janela.destroy()
     
