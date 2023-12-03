@@ -7,8 +7,8 @@ import pickle
 class Cliente:
     def __init__(self, nome: str, email: str, cpf: str):
         self.__nome = nome
-        self.__email = email
-        self.__cpf = cpf 
+        self.email = email
+        self.cpf = cpf 
         self.__lista_de_notas = [] # armazena as instâncias de NotaFiscal
 
     @property
@@ -19,9 +19,27 @@ class Cliente:
     def email(self):
         return self.__email
     
+    @email.setter
+    def email(self, email):
+        if '@' not in email:
+            raise ValueError("Email inválido!")
+        self.__email = email
+    
     @property
     def cpf(self):
         return self.__cpf
+    
+    @cpf.setter
+    def cpf(self, cpf):
+        try:
+            int(cpf)
+            
+        except ValueError:
+            raise ValueError("Cpf inválido!")
+        
+        if len(cpf) != 11:
+            raise ValueError("Cpf inválido!")
+        self.__cpf = str(cpf)
     
     @property
     def lista_de_notas(self):
@@ -165,7 +183,7 @@ class ControleCliente:
                 str += 'Cpf: ' + cliente.cpf + '\n'
                 self.limite_consulta.mostra('Encontrado', str)
         if str == '':
-            self.limite_consulta.mostra('Nao encontrado', 'Cliente nao foi encontrado!')
+            self.limite_consulta.mostra('Não encontrado', 'Cliente não foi encontrado!')
 
     def mostrar_instancias(self):
         os.system("cls")
@@ -180,9 +198,25 @@ class ControleCliente:
         nome = self.limiteCad.input_nome.get()
         email = self.limiteCad.input_email.get()
         cpf = self.limiteCad.input_cpf.get()
-        cliente = Cliente(nome, email, cpf)
+        
+        if nome == '' or email == '' or cpf == '':
+            messagebox.showinfo('Erro', 'Preencha todos os campos!')
+            self.limiteCad.lift()
+            return
+        
+        
+        try:
+            cliente = Cliente(nome, email, cpf)
+
+        except ValueError as error:
+            messagebox.showinfo('Erro', error)
+            self.limiteCad.lift()
+            return
+        
+        
         self.clientes_cadastrados.append(cliente)
         self.limiteCad.mostraJanela('Sucesso', 'Cliente cadastrado com sucesso')
+        self.limiteCad.lift()
         self.clear_handler()
 
     def clear_handler(self):

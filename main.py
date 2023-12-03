@@ -51,11 +51,11 @@ class janelaPrincipal:
 
         self.menu_nota.add_command(label="Consultar Nota Fiscal", command=self.controle.controle_nota.criar_janela_consultar_nota)
         # self.menu_nota.add_command(label="Consultar Vendas por Cliente")
-        self.menu_nota.add_command(label="Consultar Produtos mais vendidos")
-        self.menu_nota.add_command(label="Consultar Faturamento por Produto")
+        self.menu_nota.add_command(label="Consultar Produtos mais vendidos", command=self.controle.controle_nota.consultar_produtos_mais_vendidos)
+        self.menu_nota.add_command(label="Consultar Faturamento por Produto", command=self.controle.controle_nota.consultar_faturamento_por_produto)
         self.menu_nota.add_command(label="Consultar Faturamento por Cliente", command=self.controle.controle_nota.consultar_faturamento_por_cliente)
-        self.menu_nota.add_command(label="Consultar Faturamento por Data")
-        self.menu_nota.add_command(label="Consultar Faturamento por Período")
+        self.menu_nota.add_command(label="Consultar Faturamento por Cliente em um Período", command="")
+        self.menu_nota.add_command(label="Consultar Faturamento por Período", command=self.controle.controle_nota.criar_janela_consultar_periodo)
         self.menu_nota.add_command(label="Mostrar Notas Fiscais cadastradas (EXTRA)", command=self.controle.controle_nota.mostrar_notas_fiscais)
 
         

@@ -79,7 +79,7 @@ class ConjuntoProdutosCarrinho:
         self.__quantidade = quantidade
         
         
-    def calcular_preco(self):
+    def calcular_valor_total_do_conjunto(self):
         return self.quantidade * self.produto.preco_por_kg        
 
     
@@ -194,6 +194,7 @@ class AlterarProdutoView(tk.Toplevel):
         self.label_01.pack(side="left")
         
         self.entry_codigo = tk.Entry(self.frame_01)
+        self.entry_codigo.delete(0, tk.END)
         self.entry_codigo.insert(0, self.codigo)
         self.entry_codigo.configure(state="readonly")
         self.entry_codigo.pack()
@@ -206,6 +207,7 @@ class AlterarProdutoView(tk.Toplevel):
         
         self.entry_descricao = tk.Entry(self.frame_02)
         self.entry_descricao.pack()
+        self.entry_descricao.delete(0, tk.END)
         self.entry_descricao.insert(0, self.descricao)
         
         self.frame_03 = tk.Frame(self.main_frame)
@@ -217,6 +219,7 @@ class AlterarProdutoView(tk.Toplevel):
         
         self.entry_preco = tk.Entry(self.frame_03, textvariable=self.preco)
         self.entry_preco.pack()
+        self.entry_preco.delete(0, tk.END)
         self.entry_preco.insert(0, self.preco)
         
         self.button_01 = tk.Button(self.main_frame, text="Alterar Produto", command=self.controle.alterar_produto_handler)
@@ -318,19 +321,16 @@ class ControleProduto:
                 
                 
     def getProduto(self, codigo):
-        try:
-            codigo = int(codigo)
-        except ValueError:
-            raise ValueError("Código deve ser um número inteiro!")
 
-        
         for produto in self.lista_de_produtos_cadastrados:
             if produto.codigo == codigo:
+                print("ACHOU O PRODUTO")
                 return produto
+        print("NÃO ACHOU O PRODUTO")
         return None
     
     def criar_tela_fechar_carrinho(self):
-        cpf = simpledialog.askstring("Consultar Cliente", "Qual o CPF do cliente?")
+        cpf = simpledialog.askstring("Cliente", "Qual o CPF do cliente?") 
         
         cliente = self.controle_principal.controle_cliente.getCliente(cpf)
         
@@ -355,13 +355,24 @@ class ControleProduto:
             return
         
         produto = self.getProduto(codigo)
+        
+        if produto == None:
+            messagebox.showerror("Erro", "Produto não encontrado!")
+            return
+        
         produtos = ConjuntoProdutosCarrinho(produto, quantidade)
         self.lista_de_produtos_temp.append(produtos)
         messagebox.showinfo("Sucesso", "Produto adicionado ao carrinho!")
+        self.fechar_carrinho_view.lift()
         
         
     def emitir_nota_handler(self):
         lista_de_produtos = self.lista_de_produtos_temp 
+        
+        if len(lista_de_produtos) == 0:
+            messagebox.showerror("Erro", "Carrinho vazio!")
+            self.fechar_carrinho_view.lift()
+            return
         numero =len(self.controle_principal.controle_nota.lista_de_notas_fiscais_geradas()) + 1
         cliente = self.cliente_atual
         cpf_cliente = cliente.cpf
@@ -394,16 +405,17 @@ class ControleProduto:
         messagebox.showinfo("Produtos Cadastrados", str)
         
     def consultar_produto_handler(self):
-        produto_codigo = simpledialog.askstring("Consultar Cliente", "Qual o código do produto buscado?")
+        produto_codigo = simpledialog.askinteger("Consultar Cliente", "Qual o código do produto buscado?")
         
         if produto_codigo == None:
             messagebox.showerror("Erro", "Preencha todos os campos!")
             return
-        try:
-            produto_codigo = int(produto_codigo)
-            
-        except ValueError:
-            messagebox.showerror("Erro", "Código deve ser um número inteiro!")
+        
+        # produto_codigo = int(produto_codigo) # adicionei isso
+        produto = self.getProduto(produto_codigo)
+        
+        if produto == None:
+            messagebox.showerror("Erro", "Produto não encontrado!")
             return
         
         for produto in self.lista_de_produtos_cadastrados:
@@ -412,27 +424,38 @@ class ControleProduto:
                 return
         
     def alterar_produto_handler(self):
-        codigo = (self.alterar_produto_view.entry_codigo.get())
+        codigo = self.alterar_produto_view.entry_codigo.get()
         nova_descricao = self.alterar_produto_view.entry_descricao.get()
-        novo_preco = (self.alterar_produto_view.entry_preco.get())
+        novo_preco = self.alterar_produto_view.entry_preco.get()
         
         try:
-            produto = self.getProduto(codigo)
-            print(f"Produto {produto.descricao} - {produto.preco_por_kg}")
+            codigo = int(codigo)
+        except ValueError:
+            messagebox.showerror("Erro", "Código deve ser um número inteiro!")
+            return
+        
+        
+        produto = self.getProduto(codigo)
+        
+        if produto == None:
+            messagebox.showerror("Erro", "Produto não encontrado!")
+            return
+
+        
+        try:
             produto.descricao = nova_descricao
             produto.preco_por_kg = novo_preco 
-            
-            print(f"Produto {produto.descricao} - {produto.preco_por_kg}")
             
         except ValueError as error:
             messagebox.showwarning("Alerta", str(error))
             self.alterar_produto_view.lift()
             return
+        
         messagebox.showinfo("Sucesso", "Produto alterado com sucesso!")
         self.alterar_produto_view.lift()
         
     def excluir_produto_handler(self):
-        produto_codigo = simpledialog.askstring("Consultar Cliente", "Qual o código do produto que deseja excluir?")
+        produto_codigo = simpledialog.askinteger("Consultar Cliente", "Qual o código do produto que deseja excluir?")
         produto = self.getProduto(produto_codigo)
         
         
@@ -440,22 +463,25 @@ class ControleProduto:
         
         if respota == True:
             self.lista_de_produtos_cadastrados.remove(produto)
+            
             messagebox.showinfo("Sucesso", "Produto excluído com sucesso!")
     
 
          
          
     def criar_alterar_produto_view(self):
-        produto_codigo = simpledialog.askstring("Consultar Cliente", "Qual o código do produto buscado?")
+        produto_codigo = simpledialog.askinteger("Consultar Cliente", "Qual o código do produto buscado?")
         produto = self.getProduto(produto_codigo)
         
-        print(produto.codigo)
-        print(produto.descricao)
-        print(produto.preco_por_kg)
+        
         
         if produto == None:
             messagebox.showerror("Erro", "Produto não encontrado!")
             return
+        
+        print(produto.codigo)
+        print(produto.descricao)
+        print(produto.preco_por_kg)
         
         self.alterar_produto_view = AlterarProdutoView(self, produto.codigo, produto.descricao, produto.preco_por_kg)
         
