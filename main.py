@@ -85,22 +85,6 @@ class ControlePrincipal:
         self.controle_nota.salvar_notas_fiscais()
         
         
-
-    
-    # ignorar as funções abaixo
-
-        
-    def cadastrar_cliente(self):
-        self.controle_cliente.cadastrar_cliente_handler()
-
-
-
-
-
-
-        
-
-
 if __name__ == "__main__":
     main = ControlePrincipal()
 
