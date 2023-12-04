@@ -64,10 +64,7 @@ class ControleNota:
     def mostrar_ultima_nota_fiscal(self):
         lista_de_notas = self.__lista_de_notas_fiscais
         ultima_nota = lista_de_notas[-1]
-        print(ultima_nota)
-        print(ultima_nota.cpf_cliente)
-        print(ultima_nota.data)
-        print(ultima_nota.numero)
+
         str = ''
         str += f'Número da Nota: {ultima_nota.numero}\n'
         str += f'Data: {ultima_nota.data.day}/{ultima_nota.data.month}/{ultima_nota.data.year}\n'
@@ -155,14 +152,8 @@ class ControleNota:
             
             if cliente == None:
                 raise ValueError("Cliente não encontrado")
-            print("Antes")
-            print(cliente.lista_de_notas)
             cliente.lista_de_notas.append(nota)
-            print("Depois")
-            print(cliente.lista_de_notas)
-            
-            print("Total de notas")
-            print(self.__lista_de_notas_fiscais)
+
         except ValueError as error:
             messagebox.showwarning("Alerta", str(error))
             
@@ -327,10 +318,7 @@ class ControleNota:
             messagebox.showinfo("Faturamento por Cliente", "Cliente não possui notas fiscais")
             return
         
-        print(cliente.nome)
-        print(cliente.email)
-        print(cliente.cpf)
-        print(cliente.lista_de_notas)
+
         
 
         self.mostrar_notas_fiscais_por_cliente(cpf)
@@ -359,12 +347,10 @@ class ControleNota:
                 for nota in self.__lista_de_notas_fiscais:
                     for conjunto_produto in nota.produtos:
                         if conjunto_produto.produto == produto:
-                            print(conjunto_produto.calcular_valor_total_do_conjunto())
                             dicionario_produtos_vendidos[conjunto_produto.produto.descricao] += conjunto_produto.calcular_valor_total_do_conjunto()
             dicionario_em_ordem_decrescente = OrderedDict(sorted(dicionario_produtos_vendidos.items(), key=lambda x: x[1], reverse=True))
             str = ''
             str += 'Produtos mais vendidos: \n\n'
-            print(dicionario_em_ordem_decrescente)
             c = 1
             for produto in dicionario_em_ordem_decrescente:
                 
@@ -377,7 +363,6 @@ class ControleNota:
                     for nota in self.__lista_de_notas_fiscais:
                         for conjunto_produto in nota.produtos:
                             if conjunto_produto.produto == produto:
-                                print(conjunto_produto.calcular_valor_total_do_conjunto())
                                 dicionario_produtos_vendidos[conjunto_produto.produto.descricao] += conjunto_produto.calcular_valor_total_do_conjunto()
             dicionario_em_ordem_decrescente = OrderedDict(sorted(dicionario_produtos_vendidos.items(), key=lambda x: x[1], reverse=True))
             str = ''
@@ -439,7 +424,7 @@ class LimiteConsultarNota(tk.Toplevel):
         tk.Toplevel.__init__(self)
         self.title("Consultar Nota Fiscal")
     
-        self.frame_height = 150
+        self.frame_height = 250
         self.frame_width = 300
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()

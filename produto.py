@@ -125,7 +125,7 @@ class FecharCarrinhoView(tk.Toplevel):
         self.controle = controle
         tk.Toplevel.__init__(self)
         
-        self.root_height = 300
+        self.root_height = 500
         self.root_width = 300
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
@@ -162,13 +162,15 @@ class FecharCarrinhoView(tk.Toplevel):
         self.button_02 = tk.Button(self.main_frame, text="Emitir Nota", command=self.controle.emitir_nota_handler)
         self.button_02.pack(pady=20)
         
+        self.button_03 = tk.Button(self.main_frame, text="Cancelar Emissão", command=self.controle.cancelar_emissao_handler)
+        self.button_03.pack(pady=20)
+        
         self.button_fechar = tk.Button(self, text="Fechar", command=lambda:self.controle.fechar_janela(self))
         self.button_fechar.pack(pady=20)
         
         
 class AlterarProdutoView(tk.Toplevel):
     def __init__(self, controle, codigo, descricao, preco):
-        self.controle = controle
         
         self.controle = controle
         self.codigo = codigo
@@ -324,11 +326,16 @@ class ControleProduto:
 
         for produto in self.lista_de_produtos_cadastrados:
             if produto.codigo == codigo:
-                print("ACHOU O PRODUTO")
                 return produto
-        print("NÃO ACHOU O PRODUTO")
         return None
     
+    
+    def cancelar_emissao_handler(self):
+        self.lista_de_produtos_temp = []  
+        self.lista_de_tipos_de_produtos_no_carrinho = []  
+        messagebox.showinfo("Emissão da nota Cancelada", "O carrinho está vazio novamente!")
+        self.fechar_carrinho_view.lift()
+        
     def criar_tela_fechar_carrinho(self):
         cpf = simpledialog.askstring("Cliente", "Qual o CPF do cliente?") 
         
@@ -340,12 +347,16 @@ class ControleProduto:
         
         self.cliente_atual = cliente
         self.lista_de_produtos_temp = []
+        self.lista_de_tipos_de_produtos_no_carrinho = []
         messagebox.showinfo("Sucesso, Cliente encontrado!", f"Seja bem vindo {cliente.nome}, agora coloque os produtos no carrinho!")
         self.fechar_carrinho_view = FecharCarrinhoView(self)
         
     def adicionar_produto_no_carrinho_handler(self):
+        
         codigo = self.fechar_carrinho_view.entry_codigo.get()
         quantidade = self.fechar_carrinho_view.entry_quantidade.get()
+        
+        
         
         try:
             codigo = int(codigo)
@@ -358,10 +369,20 @@ class ControleProduto:
         
         if produto == None:
             messagebox.showerror("Erro", "Produto não encontrado!")
+            self.fechar_carrinho_view.lift()
+            return
+        
+        if len(self.lista_de_tipos_de_produtos_no_carrinho) == 10 and produto.descricao not in self.lista_de_tipos_de_produtos_no_carrinho:
+            messagebox.showerror("Carrinho Cheio", "O carrinho já está com 10 produtos diferentes!")
+            self.fechar_carrinho_view.lift()
             return
         
         produtos = ConjuntoProdutosCarrinho(produto, quantidade)
         self.lista_de_produtos_temp.append(produtos)
+        
+        if produto.descricao not in self.lista_de_tipos_de_produtos_no_carrinho:
+            self.lista_de_tipos_de_produtos_no_carrinho.append(produto.descricao)
+        
         messagebox.showinfo("Sucesso", "Produto adicionado ao carrinho!")
         self.fechar_carrinho_view.lift()
         
@@ -387,7 +408,9 @@ class ControleProduto:
         
         self.controle_principal.controle_nota.criar_instancia_nota(numero, data_formatada, cpf_cliente, lista_de_produtos)
         messagebox.showinfo("Sucesso", "Nota emitida com sucesso!")
-        self.fechar_carrinho_view.lift()
+        self.lista_de_produtos_temp = []
+        self.lista_de_tipos_de_produtos_no_carrinho = []
+        self.fechar_carrinho_view.destroy()
         self.controle_principal.controle_nota.mostrar_ultima_nota_fiscal()
        
   
@@ -455,6 +478,11 @@ class ControleProduto:
         
     def excluir_produto_handler(self):
         produto_codigo = simpledialog.askinteger("Consultar Cliente", "Qual o código do produto que deseja excluir?")
+        
+        if produto_codigo == None:
+            messagebox.showerror("Erro", "Preencha todos os campos!")
+            return
+        
         produto = self.getProduto(produto_codigo)
         
         
@@ -477,11 +505,7 @@ class ControleProduto:
         if produto == None:
             messagebox.showerror("Erro", "Produto não encontrado!")
             return
-        
-        print(produto.codigo)
-        print(produto.descricao)
-        print(produto.preco_por_kg)
-        
+
         self.alterar_produto_view = AlterarProdutoView(self, produto.codigo, produto.descricao, produto.preco_por_kg)
         
         
@@ -513,7 +537,6 @@ class ControleProduto:
         
 
     def fechar_janela(self, janela):
-        self.salvar_produtos_cadastrados()
         janela.destroy()
 
     
@@ -580,7 +603,6 @@ class JanelaAuxiliar:
 
         
     def fechar_janela(self, janela):
-
         janela.destroy()
 
     

@@ -114,7 +114,7 @@ class LimiteConsultaCliente():
 
 class ControleCliente:
     def __init__(self, controle_principal):
-        self.__controle_principal = controle_principal
+        self.controle_principal = controle_principal
 
         if not os.path.isfile("clientes.pickle"):
             self.clientes_cadastrados = []
@@ -148,8 +148,7 @@ class ControleCliente:
         return None
     
     def mostrar_clientes_cadastrados(self):
-        print("Clientes Cadastrados: ")
-        print(self.clientes_cadastrados)
+
         str = ''
         for cliente in self.clientes_cadastrados:
             str += 'Nome: ' + cliente.nome + '\n'
@@ -187,12 +186,6 @@ class ControleCliente:
 
     def mostrar_instancias(self):
         os.system("cls")
-        print("Clientes Cadastrados: ")
-        for cliente in self.clientes_cadastrados:
-            print(cliente.nome)
-            print(cliente.email)
-            print(cliente.cpf)
-            print("")
 
     def enter_handler(self):
         nome = self.limiteCad.input_nome.get()
