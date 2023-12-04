@@ -611,3 +611,7 @@ if __name__ == "__main__":
 
     produto_controle = ControleProduto(None)
     janela_auxiliar = JanelaAuxiliar(produto_controle)
+    
+# 2023006500 Pedro Nogueira Barboza
+# 2023003517 Pedro de Paula Gonçalves
+# 2023001577 João Henrique Flauzino

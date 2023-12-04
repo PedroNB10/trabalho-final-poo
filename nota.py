@@ -508,3 +508,7 @@ class JanelaAuxiliar:
 if __name__ == "__main__":
     nota_controle = ControleNota(None)
     janela_aux = JanelaAuxiliar(nota_controle)
+
+# 2023006500 Pedro Nogueira Barboza
+# 2023003517 Pedro de Paula Gonçalves
+# 2023001577 João Henrique Flauzino
