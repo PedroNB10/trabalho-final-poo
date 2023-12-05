@@ -377,6 +377,14 @@ class ControleProduto:
             self.fechar_carrinho_view.lift()
             return
         
+        if  len(self.lista_de_tipos_de_produtos_no_carrinho) <= 10 and produto.descricao in self.lista_de_tipos_de_produtos_no_carrinho:
+            for conjuntoProdutos in self.lista_de_produtos_temp:
+                if conjuntoProdutos.produto.descricao == produto.descricao:
+                    conjuntoProdutos.quantidade += quantidade
+                    messagebox.showinfo("Sucesso", "Produto adicionado ao carrinho!")
+                    self.fechar_carrinho_view.lift()
+                    return
+        
         produtos = ConjuntoProdutosCarrinho(produto, quantidade)
         self.lista_de_produtos_temp.append(produtos)
         
