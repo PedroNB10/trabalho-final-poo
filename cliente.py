@@ -171,8 +171,7 @@ class ControleCliente:
         self.limite_consulta = LimiteConsultaCliente()
         str = ''
         cliente_buscado = self.limite_consulta.consulta()
-        if cliente_buscado == "":
-            messagebox.showinfo('Consulta', 'Nenhum cliente foi buscado!')
+        if cliente_buscado == None:
             return
         
         for cliente in self.clientes_cadastrados:

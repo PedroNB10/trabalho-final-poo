@@ -337,7 +337,10 @@ class ControleProduto:
         self.fechar_carrinho_view.lift()
         
     def criar_tela_fechar_carrinho(self):
-        cpf = simpledialog.askstring("Cliente", "Qual o CPF do cliente?") 
+        cpf = simpledialog.askstring("Cliente", "Qual o CPF do cliente?")
+        
+        if cpf == None:
+            return
         
         cliente = self.controle_principal.controle_cliente.getCliente(cpf)
         
@@ -439,7 +442,6 @@ class ControleProduto:
         produto_codigo = simpledialog.askinteger("Consultar Cliente", "Qual o código do produto buscado?")
         
         if produto_codigo == None:
-            messagebox.showerror("Erro", "Preencha todos os campos!")
             return
         
         produto = self.getProduto(produto_codigo)
@@ -488,7 +490,6 @@ class ControleProduto:
         produto_codigo = simpledialog.askinteger("Consultar Cliente", "Qual o código do produto que deseja excluir?")
         
         if produto_codigo == None:
-            messagebox.showerror("Erro", "Preencha todos os campos!")
             return
         
         produto = self.getProduto(produto_codigo)
@@ -506,6 +507,10 @@ class ControleProduto:
          
     def criar_alterar_produto_view(self):
         produto_codigo = simpledialog.askinteger("Consultar Cliente", "Qual o código do produto buscado?")
+        
+        if produto_codigo == None: 
+            return
+        
         produto = self.getProduto(produto_codigo)
         
         

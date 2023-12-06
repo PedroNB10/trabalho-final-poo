@@ -186,6 +186,10 @@ class ControleNota:
         
     def consultar_faturamento_por_produto(self):
         codigo_produto = simpledialog.askinteger("Faturamento por Produto", "Digite o código do produto: ")
+        
+        if codigo_produto == None:
+            return
+        
         produto = self.controle_principal.controle_produto.getProduto(codigo_produto)
         
         if produto == None:
@@ -206,6 +210,9 @@ class ControleNota:
         
     def consultar_faturamento_por_cliente_por_periodo_handler(self):
         self.cpf_cliente_atual = simpledialog.askstring("Faturamento por Cliente", "Digite o CPF do cliente: ")
+        
+        if self.cpf_cliente_atual == None:
+            return
         
         cliente_consultado = self.controle_principal.controle_cliente.getCliente(self.cpf_cliente_atual)
         
@@ -308,6 +315,10 @@ class ControleNota:
         
     def consultar_faturamento_por_cliente(self):
         cpf = simpledialog.askstring("Faturamento por Cliente", "Digite o CPF do cliente: ")
+        
+        if cpf == None:
+            return
+        
         cliente = self.controle_principal.controle_cliente.getCliente(cpf)
         
         if cliente == None:
